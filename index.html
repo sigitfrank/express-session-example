@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input type="text" name="email" class="email">
+    <input type="text" name="password" class="password">
+    <p>GETEGTEGET</p>
+    <button>Login</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"
+        integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        axios.defaults.withCredentials = true
+        const emailInput = document.querySelector('.email')
+        const passwordInput = document.querySelector('.password')
+        const button = document.querySelector('button')
+
+        button.addEventListener('click', async function () {
+            try {
+                const response = await axios.post('http://localhost:5000/login', {
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                }, {
+                    withCredentials: true
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        })
+
+        const p = document.querySelector('p')
+        p.addEventListener('click', async function () {
+            try {
+                const response = await axios.get('http://localhost:5000/', {
+                    withCredentials: true
+                })
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

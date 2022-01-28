@@ -1,19 +1,29 @@
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const app = express()
 
 const TWO_HOURS = 1000 * 60 * 60 * 2
 
+app.set('trust proxy', 1)
+
+app.use(cors({
+    credentials:true,
+    origin: "http://127.0.0.1:5500",
+}))
+app.use(cookieParser())
 app.use(session({
     name: 'sid',
     resave: false,
     saveUninitialized: false,
-    secret: 'secret',
+    secret: 'anyrandomstring',
     cookie: {
         maxAge: TWO_HOURS,
-        sameSite: true,
-        secure: false
+        sameSite: false,
+        secure: false,
+        httpOnly:false
     }
 }))
 
@@ -54,6 +64,7 @@ const redirectLogin = (req, res, next) => {
 }
 
 const redirectHome = (req, res, next) => {
+    console.log(req.sessionID)
     if (req.session.userId) {
         res.redirect('/home')
     } else {
@@ -62,6 +73,7 @@ const redirectHome = (req, res, next) => {
 }
 
 app.get('/', (req, res) => {
+    console.log(req.session)
     const { userId } = req.session
     res.send(`
     <h1>Welcome!</h1>
@@ -116,8 +128,12 @@ app.post('/login', redirectHome, (req, res) => {
     if (!email || !password) return res.status(400)
     const user = users.find(user => user.email === email && user.password === password)
     if (!user) return res.status(400)
+    console.log(user.id)
     req.session.userId = user.id
-    return res.redirect('/home')
+    console.log(req.session)
+    return res.status(200).json({
+        sessionID:req.session.id
+    })
 
 })
 
