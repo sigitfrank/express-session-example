@@ -157,6 +157,7 @@ app.post('/register', redirectHome, (req, res) => {
 app.post('/logout', redirectLogin, (req, res) => {
     req.session.destroy(err => {
         if (err) return res.redirect('/home')
+        console.log(res.cookie)
         res.clearCookie('sid')
         res.redirect('/login')
     })
