@@ -131,10 +131,11 @@ app.post('/login', redirectHome, (req, res) => {
     console.log(user.id)
     req.session.userId = user.id
     console.log(req.session)
-    return res.status(200).json({
-        sessionID:req.session.id
-    })
+    // return res.status(200).json({
+    //     sessionID:req.session.id
+    // })
 
+    res.redirect('/')
 })
 
 app.post('/register', redirectHome, (req, res) => {
